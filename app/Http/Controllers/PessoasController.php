@@ -72,14 +72,14 @@ class PessoasController extends Controller
      * @param  \App\Pessoas  $Pessoas
      * @return \Illuminate\Http\Response
      */
-    public function show(Pessoas $Pessoas)
+    public function show($id)
     {
         //
-    $pessoas = Pessoas::find($Pessoas->id);
-    if(!$pessoas)
-         abort(404);
+        $pessoas = Pessoas::find($id);
+        if(!$pessoas)
+             abort(404);
 
-    return view('pessoas.details')->with('detailpage', $pessoas);
+        return view('pessoas.details')->with('detailpage', $pessoas);
     }
 
     /**
@@ -88,14 +88,14 @@ class PessoasController extends Controller
      * @param  \App\Pessoas  $Pessoas
      * @return \Illuminate\Http\Response
      */
-    public function edit(Pessoas $Pessoas)
+    public function edit($id)
     {
         //
-    $pessoas = Pessoas::find($Pessoas->id);
-    if(!$pessoas)
-         abort(404);
+        $pessoas = Pessoas::find($id);
+        if(!$pessoas)
+          abort(404);
 
-    return view('pessoas.edit')->with('detailpage', $pessoas);
+        return view('pessoas.edit')->with('detailpage', $pessoas);
     }
 
     /**
@@ -105,31 +105,31 @@ class PessoasController extends Controller
      * @param  \App\Pessoas  $Pessoas
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pessoas $Pessoas)
+    public function update(Request $request, $id)
     {
         //
-    $this->validate($request, [
-         'nome' => 'required',
-         'data_nascimento' => 'required',
-         'cpf' => 'required',
-         'endereco' => 'required',
-         'complemento' => '',
-         'bairro' => 'required',
-         'cidade' => 'required',
-         'uf' => 'required'
-    ]);
+        $this->validate($request, [
+            'nome' => 'required',
+            'data_nascimento' => 'required',
+            'cpf' => 'required',
+            'endereco' => 'required',
+            'complemento' => '',
+            'bairro' => 'required',
+            'cidade' => 'required',
+            'uf' => 'required'
+        ]);
 
-    $PessoasUpdate = Pessoas::find();
-    $PessoasUpdate->nome = $request->nome;
-    $PessoasUpdate->data_nascimento = $request->data_nascimento;
-    $PessoasUpdate->cpf = $request->cpf;
-    $PessoasUpdate->endereco = $request->endereco;
-    $PessoasUpdate->complemento = $request->complemento;
-    $PessoasUpdate->bairro = $request->bairro;
-    $PessoasUpdate->cidade = $request->cidade;
-    $PessoasUpdate->uf = $request->uf;
-    $PessoasUpdate->save();
-    return redirect('pessoas')->with('message', 'Pessoa editada com sucesso');
+        $PessoasUpdate = Pessoas::find($id);
+        $PessoasUpdate->nome = $request->nome;
+        $PessoasUpdate->data_nascimento = date('Y-m-d', strtotime($request->data_nascimento));
+        $PessoasUpdate->cpf = $request->cpf;
+        $PessoasUpdate->endereco = $request->endereco;
+        $PessoasUpdate->complemento = $request->complemento;
+        $PessoasUpdate->bairro = $request->bairro;
+        $PessoasUpdate->cidade = $request->cidade;
+        $PessoasUpdate->uf = $request->uf;
+        $PessoasUpdate->save();
+        return redirect('pessoas')->with('message', 'Pessoa editada com sucesso');
     }
 
     /**
@@ -138,10 +138,10 @@ class PessoasController extends Controller
      * @param  \App\Pessoas  $Pessoas
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pessoas $Pessoas)
+    public function destroy($id)
     {
         //
-    $Pessoas = Pessoas::find($Pessoas->id);
+    $Pessoas = Pessoas::find($id);
     $pessoas->delete();
     return redirect('pessoas')->with('message', 'Pessoa apagada com sucesso');
     }
